@@ -32,7 +32,7 @@ var chartGroup = svg.append("g")
 
 // Initial Params
 var chosenXAxis = "ERA";
-var chosenYAxis = "wOBA";
+var chosenYAxis = "BABIP";
 
 // function used for updating x-scale var upon click on axis label
 function xScale(pitcherData, chosenXAxis) {
@@ -112,15 +112,15 @@ function renderyCircles(circlesGroup, newYScale, chosenYAxis) {
 // function used for updating circles group with new tooltip---- to render the yAxis label There will need to be an and statement 
 function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
-    if (chosenXAxis === "ERA" && chosenYAxis == "wOBA") {
+    if (chosenXAxis === "ERA" && chosenYAxis == "BABIP") {
         var label = "ERA:"
-        var label2 = "wOBA:"
+        var label2 = "BABIP:"
     } else if (chosenXAxis === "ERA" && chosenYAxis == "BB") {
         var label = "ERA:"
         var label2 = "BB%:"
-    } else if (chosenXAxis === "SO" && chosenYAxis == "wOBA") {
+    } else if (chosenXAxis === "SO" && chosenYAxis == "BABIP") {
         var label = "SO%:"
-        var label2 = "wOBA:"
+        var label2 = "BABIP:"
     } else {
         var label = "SO%:"
         var label2 = "BB%"
@@ -130,7 +130,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
         .attr("class", "tooltip")
         .offset([80, -60])
         .html(function(d) {
-            return (`${d.Player_Last},${d.Player_First}<br>${label} ${d[chosenXAxis]}<br>${label2} ${d[chosenYAxis]}`);
+            return (`${d.LastName},${d.FirstName}<br>${label} ${d[chosenXAxis]}<br>${label2} ${d[chosenYAxis]}`);
         });
 
     circlesGroup.call(toolTip);
@@ -153,7 +153,7 @@ d3.csv("pitcherData.csv").then(function(pitcherData, err) {
     // parse data
     pitcherData.forEach(function(data) {
         data.ERA = +data.ERA;
-        data.wOBA = +data.wOBA;
+        data.BABIP = +data.BABIP;
         data.Player = +data.Player;
         data.BB = +data.BB;
         data.SO = +data.SO;
@@ -215,14 +215,14 @@ d3.csv("pitcherData.csv").then(function(pitcherData, err) {
         .attr("transform", `translate(0, 0)`);
 
     // append y axis
-    var wOBALabel = ylabelsGroup.append("text")
+    var BABIPLabel = ylabelsGroup.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 0 - margin.left)
         .attr("x", 0 - (height / 2))
         .attr("dy", "2em")
-        .attr("value", "wOBA")
+        .attr("value", "BABIP")
         .classed("active", true)
-        .text("wOBA");
+        .text("BABIP");
 
     // append y axis this will be the second y -axis value
     var BBLabel = ylabelsGroup.append("text")
@@ -310,18 +310,18 @@ d3.csv("pitcherData.csv").then(function(pitcherData, err) {
                 circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
 
                 // changes classes to change bold text
-                if (chosenYAxis === "wOBA") {
+                if (chosenYAxis === "BABIP") {
                     BBLabel
                         .classed("active", false)
                         .classed("inactive", true);
-                    wOBALabel
+                    BABIPLabel
                         .classed("active", true)
                         .classed("inactive", false);
                 } else {
                     BBLabel
                         .classed("active", true)
                         .classed("inactive", false);
-                    wOBALabel
+                    BABIPLabel
                         .classed("active", false)
                         .classed("inactive", true);
                 }
